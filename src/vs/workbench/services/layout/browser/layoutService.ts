@@ -287,13 +287,17 @@ export function getFloatingPaneCompositeHorizontalMargins(layoutService: IWorkbe
 	const margin = getFloatingPanelMargin(layoutService);
 	const outerMargin = getFloatingPanelOuterMargin(layoutService);
 
-	// The primary side bar meets the activity bar rail flush so the two read as one connected
-	// surface. Only a left-positioned side bar needs this explicitly; on the right the seam is
-	// the side bar's trailing edge, which already uses the inner margin.
-	const meetsActivityBarRail = partId === Parts.SIDEBAR_PART
-		&& layoutService.getSideBarPosition() === Position.LEFT
+	// Loom: the rail card spans its whole column (see ActivitybarPart.FLOATING_LANE), and
+	// whichever card sits directly against it keeps no leading gap either — that way the
+	// rail's column ends exactly where its card does in every layout state, and the boundary
+	// stays put as the side bar is toggled. The surfaces separate by colour, not by a gap.
+	// Mirrored by the sidebar rule in floatingPanels.css.
+	const railOnLeft = layoutService.getSideBarPosition() === Position.LEFT
 		&& layoutService.isVisible(Parts.ACTIVITYBAR_PART);
-	const leading = meetsActivityBarRail ? FLOATING_PANEL_INNER_MARGIN : margin;
+	const meetsRail = railOnLeft
+		&& (partId === Parts.SIDEBAR_PART
+			|| (partId === Parts.EDITOR_PART && !layoutService.isVisible(Parts.SIDEBAR_PART)));
+	const leading = meetsRail ? FLOATING_PANEL_INNER_MARGIN : margin;
 
 	const panelMeetsRightActivityBar = partId === Parts.PANEL_PART
 		&& isHorizontal(layoutService.getPanelPosition())

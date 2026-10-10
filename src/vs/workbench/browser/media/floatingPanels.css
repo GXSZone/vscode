@@ -52,18 +52,15 @@
 }
 
 /*
- * The primary side bar meets the activity bar rail flush, so the two read as one connected
- * surface: the facing edge drops its gap and its rounded corners, and gives up its border so
- * the rail's own facing border is the single hairline seam. The rail has to be the one that
- * draws it — otherwise its visible interior would run past its transparent edge to the side
- * bar's border, leaving an odd number of pixels around the icon column and pushing the items
- * 1px off-center. Kept in sync with `getFloatingPaneCompositeHorizontalMargins`.
+ * Loom: the rail card spans its whole column and the primary side bar follows immediately,
+ * so the two surfaces meet at a colour boundary — the rail's frame tone against the side
+ * bar's content tone — rather than at an unowned sliver of gutter whose colour would depend
+ * on which neighbour painted it. The side bar keeps its own rounded corners, which is what
+ * makes the boundary legible as two separate surfaces.
+ * Kept in sync with `getFloatingPaneCompositeHorizontalMargins`.
  */
 .monaco-workbench.floating-panels:not(.noactivitybar) .part.sidebar.left {
-	--modern-ui-floating-card-seam-left-color: transparent;
 	margin-left: var(--modern-ui-floating-card-inner-margin);
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
 }
 
 .monaco-workbench.floating-panels:not(.noactivitybar) .part.sidebar.right {
@@ -224,7 +221,7 @@
 	 * horizontal padding, doubled. It is independent of the cluster perimeter so the icons
 	 * keep their inset whatever the gutter is. The card width and the item centering below
 	 * both derive from it, and `ActivitybarPart.floatingHorizontalGutter` reserves it. */
-	--modern-ui-activitybar-lane: var(--vscode-spacing-size80);
+	--modern-ui-activitybar-lane: var(--vscode-spacing-size60);
 	margin: var(--modern-ui-floating-card-inner-margin) var(--modern-ui-floating-card-inner-margin) var(--modern-ui-floating-card-margin);
 	width: calc(var(--activity-bar-width, 48px) + var(--modern-ui-activitybar-lane));
 	height: calc(100% - var(--modern-ui-floating-card-margin));
@@ -236,10 +233,22 @@
 
 /* The rail keeps a border on all four sides: the facing one is the seam the side bar gives up
  * (see above), so the icon column is always centered in an even interior. */
+/* Loom: with the side bar hidden the editor becomes the card that sits directly against
+ * the rail, so it takes the inner margin there — the model says cards meet flush and only
+ * a cluster's outer edge keeps a gutter. Without this the rail's column ends at 40 while the
+ * editor's own leading gutter paints 40..44 in the shell tone, making the rail look wider
+ * whenever the side bar is toggled. */
+.monaco-workbench.floating-panels:not(.noactivitybar).nosidebar .part.editor {
+	margin-left: var(--modern-ui-floating-card-inner-margin);
+}
+
 .monaco-workbench.floating-panels .part.activitybar.left {
-	margin-left: var(--modern-ui-floating-card-outer-margin);
+	/* Loom: the rail sits flush against the window edge and fills its column, so no gap
+	 * exists whose colour would depend on what is drawn beside it. The side bar no longer
+	 * merges with it, hence all four corners stay rounded. */
+	margin-left: var(--modern-ui-floating-card-inner-margin);
 	margin-right: var(--modern-ui-floating-card-inner-margin);
-	border-radius: var(--vscode-cornerRadius-large) 0 0 var(--vscode-cornerRadius-large);
+	border-radius: var(--vscode-cornerRadius-large);
 }
 
 .monaco-workbench.floating-panels .part.activitybar.right {
@@ -321,7 +330,15 @@
  */
 .monaco-workbench.floating-panels .part.activitybar > .content {
 	position: relative;
-	left: calc((var(--modern-ui-activitybar-lane) - 2px) / 2);
+	/* Loom: center the icon column in the card by giving it the column width and letting
+	 * the two margins absorb the remainder. Positioning with `left` cannot do this: a
+	 * percentage there resolves against the card's border box, while the offset itself
+	 * starts inside its border, so the two disagree by exactly one border stroke. The
+	 * upstream `(lane - 2px) / 2` likewise collapses to 0 at a 2px lane. */
+	left: 0;
+	width: var(--activity-bar-width, 34px);
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /*

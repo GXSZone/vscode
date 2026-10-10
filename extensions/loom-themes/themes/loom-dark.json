@@ -1,0 +1,114 @@
+{
+	// Loom 品牌色 —— 变更时集中替换以下四项，勿散落到别处
+	//   brand.primary    #3B82F6   品牌主色
+	//   brand.hover      #2D6FE0   主色悬停态
+	//   brand.onPrimary  #FFFFFF   主色上的前景
+	//   brand.focus      #3B82F6   焦点边框
+	"$schema": "vscode://schemas/color-theme",
+	"name": "Loom Dark",
+	"type": "dark",
+	"colors": {
+		"button.background": "#3B82F6",
+		"button.foreground": "#FFFFFF",
+		"button.hoverBackground": "#2D6FE0",
+		"focusBorder": "#00000000",
+
+		/* ── 三层表面结构 ──────────────────────────────
+		   外框：标题栏 + 活动栏      用 raised，比内容区亮一档，形成包边
+		   内容：侧边栏 + 编辑器      用 default，两者同色
+		   标签栏：比内容区沉一档      用 sunken，让标签区后退
+		   状态栏：全透明，让底部融进内容区
+		   这三层直接对应 loom.surface.* token，改一处即可换肤。 */
+		"editor.background": "#191A1B",
+		"sideBar.background": "#191A1B",
+		"sideBarSectionHeader.background": "#191A1B",
+
+		"titleBar.activeBackground": "#1F2021",
+		"titleBar.inactiveBackground": "#1F2021",
+		"titleBar.activeForeground": "#BFBFBF",
+		"titleBar.inactiveForeground": "#8C8C8C",
+		"activityBar.background": "#1F2021",
+		"activityBar.foreground": "#F5F9FE",
+		"activityBar.inactiveForeground": "#8C8C8C",
+		"modernActivityBarItem.activeForeground": "#F5F9FE",
+
+		"editorGroupHeader.tabsBackground": "#121314",
+		"editorGroupHeader.noTabsBackground": "#121314",
+		"tab.activeBackground": "#191A1B",
+		"tab.inactiveBackground": "#121314",
+
+		"statusBar.background": "#00000000",
+		"statusBar.noFolderBackground": "#00000000",
+		"panel.background": "#191A1B",
+
+		/* 活动标签顶部标示线 */
+		"tab.activeBorderTop": "#3B82F6",
+		"tab.unfocusedActiveBorderTop": "#00000000",
+		"tab.activeBorder": "#191A1B",
+		"tab.border": "#00000000",
+
+		/* 分隔线：相邻同色已足以消隐视觉分隔，这里再压平一层确保干净 */
+		"titleBar.border": "#00000000",
+		"activityBar.border": "#00000000",
+		"sideBar.border": "#00000000",
+		"statusBar.border": "#00000000",
+		"editorGroup.border": "#00000000",
+		"editorGroupHeader.border": "#00000000",
+		"contrastBorder": "#00000000",
+		"editorGroup.focusedEmptyBorder": "#00000000",
+		"editorGroup.dropIntoPromptBorder": "#00000000",
+		"statusBar.noFolderBorder": "#00000000",
+		"statusBar.focusBorder": "#00000000",
+		"statusBar.debuggingBorder": "#00000000",
+		"activityBar.activeBorder": "#00000000",
+		"activityBar.activeFocusBorder": "#00000000",
+		"activityBar.dropBorder": "#00000000",
+		"panel.dropBorder": "#00000000",
+		"sideBarSectionHeader.border": "#00000000",
+		"editorGroupHeader.tabsBorder": "#00000000",
+		"widget.border": "#2A2B2C",
+		"menu.border": "#00000000",
+		"pickerGroup.border": "#00000000",
+		"sash.hoverBorder": "#3B82F6",
+		"panel.border": "#2A2B2C",
+
+		/* ── Modern UI 框架 token（原生实验特性，已在本构建启用）────
+		   surface.border 的默认值是 foreground 的 15% alpha，实测合成为
+		   #313233 —— 那就是活动栏/侧边栏/编辑器上残留的竖线。
+		   这里直接压平，并让外壳与内容区各自归位。 */
+		"surface.background": "#191A1B",
+		"surface.foreground": "#BFBFBF",
+		"surface.border": "#00000000",
+		"editor.border": "#00000000",
+		"modernPanel.border": "#00000000",
+		"modernActivityBar.border": "#00000000",
+
+		"modernUI.shellBackground": "#1F2021",
+		"modernUI.inactiveShellBackground": "#1F2021",
+
+		"modernActivityBar.background": "#1F2021",
+		"modernActivityBar.inactiveBackground": "#1F2021",
+		"modernActivityBarItem.activeBackground": "#FFFFFF1F",
+		"modernActivityBarItem.hoverBackground": "#FFFFFF14",
+
+		"modernSash.gripForeground": "#00000000",
+
+		"foreground": "#BFBFBF",
+		"descriptionForeground": "#8C8C8C",
+		"list.hoverBackground": "#FFFFFF14",
+		"list.activeSelectionBackground": "#FFFFFF22",
+
+		// Loom 专有 token
+		"loom.surface.default": "#191A1B",
+		"loom.surface.raised": "#1F2021",
+		"loom.surface.sunken": "#121314",
+		"loom.text.default": "#BFBFBF",
+		"loom.text.muted": "#8C8C8C",
+		"loom.text.disabled": "#555555",
+		"loom.border.subtle": "#2A2B2C",
+		"loom.border.strong": "#3A3B3C",
+		"loom.accent.default": "#3B82F6",
+		"loom.accent.hover": "#2D6FE0",
+		"loom.accent.onAccent": "#FFFFFF"
+	}
+}

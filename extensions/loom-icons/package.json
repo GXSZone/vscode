@@ -1,0 +1,23 @@
+{
+	"name": "loom-icons",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "1.0.0",
+	"publisher": "loom",
+	"license": "MIT",
+	"engines": {
+		"vscode": "*"
+	},
+	"contributes": {
+		"productIconThemes": [
+			{
+				"id": "Loom Icons",
+				"label": "%iconsLabel%",
+				"path": "./themes/loom-icons.json"
+			}
+		],
+		"configurationDefaults": {
+			"workbench.productIconTheme": "Loom Icons"
+		}
+	}
+}

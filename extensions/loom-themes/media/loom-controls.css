@@ -1,0 +1,72 @@
+/* Loom 控件层：按钮、输入框、下拉、列表项的圆润化。
+ * 取值只消费 --loom-*，全部带兜底值。 */
+
+/* ── 按钮：主力圆角，现代感的柔和过渡 ── */
+.monaco-workbench .monaco-button,
+.monaco-workbench .monaco-text-button {
+	border-radius: var(--loom-radius-6, 6px);
+	padding: var(--loom-space-1, 4px) var(--loom-space-3, 12px);
+	min-height: var(--loom-control-height-base, 26px);
+	font-family: var(--loom-font-family-ui, inherit);
+	font-size: var(--loom-font-size-base, 13px);
+	font-weight: var(--loom-font-weight-medium, 500);
+	transition: background-color var(--loom-motion-duration-fast, 100ms) var(--loom-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+	            border-color var(--loom-motion-duration-fast, 100ms) var(--loom-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.monaco-workbench .monaco-button.monaco-dropdown-button {
+	border-radius: var(--loom-radius-6, 6px);
+}
+
+/* ── 输入框：圆角 + 清爽内边距 ── */
+.monaco-workbench .monaco-inputbox,
+.monaco-workbench .monaco-inputbox > .ibwrapper > .input {
+	border-radius: var(--loom-radius-6, 6px);
+}
+
+.monaco-workbench .monaco-inputbox > .ibwrapper > .input {
+	padding: var(--loom-space-1, 4px) var(--loom-space-2, 8px);
+	font-family: var(--loom-font-family-ui, inherit);
+}
+
+/* ── 下拉框 ── */
+.monaco-workbench .monaco-select-box,
+.monaco-workbench select {
+	border-radius: var(--loom-radius-6, 6px);
+	padding: var(--loom-space-1, 4px) var(--loom-space-2, 8px);
+	min-height: var(--loom-control-height-base, 26px);
+}
+
+/* ── 复选框与单选：圆润 ── */
+.monaco-workbench .monaco-custom-checkbox,
+.monaco-workbench .monaco-checkbox .checkbox,
+.monaco-workbench input[type="checkbox"] {
+	border-radius: var(--loom-radius-4, 4px);
+}
+
+/* ── 列表项：圆角高亮，行距松弛 ── */
+.monaco-workbench .monaco-list .monaco-list-row {
+	border-radius: var(--loom-radius-4, 4px);
+	transition: background-color var(--loom-motion-duration-fast, 100ms) var(--loom-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.monaco-workbench .monaco-list .monaco-list-rows {
+	padding-left: var(--loom-space-1, 4px);
+	padding-right: var(--loom-space-1, 4px);
+}
+
+/* ── 树与列表：选中态用圆角块而非整行平铺 ── */
+.monaco-workbench .monaco-list:focus .monaco-list-row.focused,
+.monaco-workbench .monaco-list .monaco-list-row.selected {
+	border-radius: var(--loom-radius-4, 4px);
+}
+
+/* ── 输入框组内的按钮与输入贴合 ── */
+.monaco-workbench .monaco-inputbox > .ibwrapper {
+	border-radius: var(--loom-radius-6, 6px);
+}
+
+/* ── 滚动条滑块：圆润 ── */
+.monaco-workbench .monaco-scrollable-element > .scrollbar > .slider {
+	border-radius: var(--loom-radius-full, 9999px);
+}

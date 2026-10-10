@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { localize, localize2 } from '../../../../nls.js';
+import { isLoomEntrypointVisible } from '../../../common/loomEntrypoints.js';
 import { KeyMod, KeyChord, KeyCode } from '../../../../base/common/keyCodes.js';
 import { MenuRegistry, MenuId, Action2, registerAction2, ISubmenuItem } from '../../../../platform/actions/common/actions.js';
 import { equalsIgnoreCase } from '../../../../base/common/strings.js';
@@ -900,18 +901,22 @@ registerAction2(class extends Action2 {
 });
 
 const ThemesSubMenu = new MenuId('ThemesSubMenu');
-MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
-	title: localize('themes', "Themes"),
-	submenu: ThemesSubMenu,
-	group: '2_configuration',
-	order: 7
-} satisfies ISubmenuItem);
-MenuRegistry.appendMenuItem(MenuId.MenubarPreferencesMenu, {
-	title: localize({ key: 'miSelectTheme', comment: ['&& denotes a mnemonic'] }, "&&Themes"),
-	submenu: ThemesSubMenu,
-	group: '2_configuration',
-	order: 7
-} satisfies ISubmenuItem);
+
+// Loom：主题子菜单收起（颜色主题仍可从欢迎页与设置进入），恢复见 loomEntrypoints
+if (isLoomEntrypointVisible('themeMenu')) {
+	MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
+		title: localize('themes', "Themes"),
+		submenu: ThemesSubMenu,
+		group: '2_configuration',
+		order: 7
+	} satisfies ISubmenuItem);
+	MenuRegistry.appendMenuItem(MenuId.MenubarPreferencesMenu, {
+		title: localize({ key: 'miSelectTheme', comment: ['&& denotes a mnemonic'] }, "&&Themes"),
+		submenu: ThemesSubMenu,
+		group: '2_configuration',
+		order: 7
+	} satisfies ISubmenuItem);
+}
 
 MenuRegistry.appendMenuItem(ThemesSubMenu, {
 	command: {

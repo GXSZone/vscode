@@ -635,7 +635,8 @@ Registry.as<IViewContainersRegistry>(Extensions.ViewContainersRegistry).register
 		id: VIEWLET_ID,
 		title: nls.localize2('remote.explorer', "Remote Explorer"),
 		ctorDescriptor: new SyncDescriptor(RemoteViewPaneContainer),
-		hideIfEmpty: true,
+		// Loom：远程入口常驻活动栏（上游为 hideIfEmpty: true，无内容时会隐藏图标）
+		hideIfEmpty: false,
 		viewOrderDelegate: {
 			getOrder: (group?: string) => {
 				if (!group) {

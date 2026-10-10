@@ -714,7 +714,7 @@ export class GlobalActivityActionViewItem extends AbstractGlobalActivityActionVi
 		@IConfigurationService configurationService: IConfigurationService,
 		@IWorkbenchEnvironmentService environmentService: IWorkbenchEnvironmentService,
 		@IKeybindingService keybindingService: IKeybindingService,
-		@IInstantiationService instantiationService: IInstantiationService,
+		@IInstantiationService private readonly instantiationService: IInstantiationService,
 		@IActivityService activityService: IActivityService,
 	) {
 		const action = instantiationService.createInstance(CompositeBarAction, {
@@ -734,6 +734,17 @@ export class GlobalActivityActionViewItem extends AbstractGlobalActivityActionVi
 
 	override render(container: HTMLElement): void {
 		super.render(container);
+
+		// Loom：齿轮左键直接打开自建的设置页，不再弹出管理菜单。
+		// 用捕获阶段监听并阻止继续传播，先于父类注册的 MOUSE_DOWN 处理生效；
+		// 右键（button !== 0）不拦截，上下文菜单保持原样。
+		this._register(addDisposableListener(this.container, EventType.MOUSE_DOWN, (e: MouseEvent) => {
+			if (e.button === 0) {
+				e.stopImmediatePropagation();
+				e.preventDefault();
+				this.instantiationService.invokeFunction(accessor => accessor.get(ICommandService).executeCommand('loom.action.openSettings'));
+			}
+		}, true));
 
 		this.profileBadge = append(container, $('.profile-badge'));
 		this.profileBadgeContent = append(this.profileBadge, $('.profile-badge-content'));

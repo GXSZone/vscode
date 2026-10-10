@@ -1,0 +1,162 @@
+{
+	"name": "loom-themes",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"categories": [
+		"Themes"
+	],
+	"version": "1.0.0",
+	"publisher": "loom",
+	"license": "MIT",
+	"engines": {
+		"vscode": "*"
+	},
+	"enabledApiProposals": [
+		"css"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"id": "Loom Dark",
+				"label": "%darkLabel%",
+				"uiTheme": "vs-dark",
+				"path": "./themes/loom-dark.json"
+			},
+			{
+				"id": "Loom Light",
+				"label": "%lightLabel%",
+				"uiTheme": "vs",
+				"path": "./themes/loom-light.json"
+			}
+		],
+		"css": [
+			{
+				"path": "./media/loom.css"
+			},
+			{
+				"path": "./media/loom-surface.css"
+			},
+			{
+				"path": "./media/loom-controls.css"
+			},
+			{
+				"path": "./media/loom-overlays.css"
+			},
+			{
+				"path": "./media/loom-settings.css"
+			}
+		],
+		"colors": [
+		{
+			"id": "loom.surface.default",
+			"description": "Loom 默认表面",
+			"defaults": {
+				"dark": "#191A1B",
+				"light": "#FAFAFD",
+				"highContrast": "#000000",
+				"highContrastLight": "#FFFFFF"
+			}
+		},
+		{
+			"id": "loom.surface.raised",
+			"description": "Loom 抬升表面",
+			"defaults": {
+				"dark": "#1F2021",
+				"light": "#FFFFFF",
+				"highContrast": "#000000",
+				"highContrastLight": "#FFFFFF"
+			}
+		},
+		{
+			"id": "loom.surface.sunken",
+			"description": "Loom 下沉表面",
+			"defaults": {
+				"dark": "#121314",
+				"light": "#F0F1F2",
+				"highContrast": "#000000",
+				"highContrastLight": "#FFFFFF"
+			}
+		},
+		{
+			"id": "loom.text.default",
+			"description": "Loom 主文本",
+			"defaults": {
+				"dark": "#BFBFBF",
+				"light": "#202020",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.text.muted",
+			"description": "Loom 次要文本",
+			"defaults": {
+				"dark": "#8C8C8C",
+				"light": "#606060",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.text.disabled",
+			"description": "Loom 禁用文本",
+			"defaults": {
+				"dark": "#555555",
+				"light": "#A0A0A0",
+				"highContrast": "#7F7F7F",
+				"highContrastLight": "#7F7F7F"
+			}
+		},
+		{
+			"id": "loom.border.subtle",
+			"description": "Loom 细边框",
+			"defaults": {
+				"dark": "#2A2B2C",
+				"light": "#F0F1F2",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.border.strong",
+			"description": "Loom 强边框",
+			"defaults": {
+				"dark": "#3A3B3C",
+				"light": "#D0D1D2",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.accent.default",
+			"description": "Loom 强调色",
+			"defaults": {
+				"dark": "#3B82F6",
+				"light": "#2563EB",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.accent.hover",
+			"description": "Loom 强调色悬停",
+			"defaults": {
+				"dark": "#2D6FE0",
+				"light": "#1D4ED8",
+				"highContrast": "#FFFFFF",
+				"highContrastLight": "#000000"
+			}
+		},
+		{
+			"id": "loom.accent.onAccent",
+			"description": "Loom 强调色前景",
+			"defaults": {
+				"dark": "#FFFFFF",
+				"light": "#FFFFFF",
+				"highContrast": "#000000",
+				"highContrastLight": "#FFFFFF"
+			}
+		}
+		]
+	}
+}

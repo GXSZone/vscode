@@ -1,0 +1,137 @@
+/* Loom 设计 token 定义处。
+ *
+ * 本文件经 loom-themes 的 contributes.css 注入 workbench，承担两个职责：
+ *   1. 非颜色 token 的唯一定义处（:root）；
+ *   2. --vscode-* 到 --loom-* 的单向桥接（.monaco-workbench）。
+ *
+ * 生命周期约束：CSS 仅在本扩展的主题（Loom Dark / Loom Light）处于活动状态时
+ * 挂载（cssExtensionPoint.isExtensionThemeActive）。主题切走后本文件被卸载，
+ * 全部 --loom-* 取值失效。因此所有消费点必须写成 var(--loom-x, <兜底值>)，
+ * 该纪律由 scripts/verify-token-fallback.mjs 强制。
+ *
+ * 作用域约束（运行期实测结论）：
+ *   --vscode-* 由 colorThemeCss.ts 写在 .monaco-workbench 上，不在 :root。
+ *   CSS 自定义属性在声明处解析 var()，因此颜色桥接若写在 :root，会因
+ *   --vscode-* 尚未定义而被固化为 fallback 值，后续主题切换不再跟随。
+ *   故：非颜色 token 用 :root（与主题无关），颜色桥接必须用 .monaco-workbench。
+ *
+ * 命名约定（spec 4.6）：结构化三层「类别-类别-变体」，不设扁平过渡层。
+ * --loom-* 是唯一消费接口，组件与业务样式不得直接引用 --vscode-*。
+ *
+ * 间距基准：1 单位 = 4px。
+ */
+
+:root {
+	/* 注入标记：运行期读取该变量即可确认注入链路生效 */
+	--loom-marker: injected;
+
+	/* ── 字体与排版 ───────────────────────────────── */
+	--loom-font-family-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei UI", system-ui, sans-serif;
+	--loom-font-family-code: "Cascadia Code", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+
+	--loom-font-size-xs: 11px;
+	--loom-font-size-sm: 12px;
+	--loom-font-size-base: 13px;
+	--loom-font-size-lg: 15px;
+	--loom-font-size-xl: 18px;
+
+	--loom-font-weight-regular: 400;
+	--loom-font-weight-medium: 500;
+	--loom-font-weight-semibold: 600;
+
+	--loom-line-height-tight: 1.25;
+	--loom-line-height-base: 1.5;
+	--loom-line-height-loose: 1.75;
+
+	/* ── 间距与密度 ───────────────────────────────── */
+	--loom-space-0: 0;
+	--loom-space-1: 4px;
+	--loom-space-2: 8px;
+	--loom-space-3: 12px;
+	--loom-space-4: 16px;
+	--loom-space-6: 24px;
+	--loom-space-8: 32px;
+	--loom-space-12: 48px;
+	--loom-space-16: 64px;
+	--loom-space-24: 96px;
+
+	/* 密度为互斥标记：当前仅 default 置 1，另两者置 0。
+	   切换密度需同时改写这三个值（它们的和恒为 1）。 */
+	--loom-density-compact: 0;
+	--loom-density-default: 1;
+	--loom-density-comfortable: 0;
+
+	/* ── 形状与层次 ───────────────────────────────── */
+	--loom-radius-2: 2px;
+	--loom-radius-4: 4px;
+	--loom-radius-6: 6px;
+	--loom-radius-8: 8px;
+	--loom-radius-full: 9999px;
+
+	--loom-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.12);
+	--loom-shadow-2: 0 2px 8px rgba(0, 0, 0, 0.18);
+	--loom-shadow-3: 0 8px 24px rgba(0, 0, 0, 0.26);
+
+	--loom-border-width-1: 1px;
+	--loom-border-width-2: 2px;
+
+	/* ── 动效 ─────────────────────────────────────── */
+	--loom-motion-duration-fast: 100ms;
+	--loom-motion-duration-base: 160ms;
+	--loom-motion-duration-slow: 240ms;
+
+	--loom-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+	--loom-motion-easing-decelerate: cubic-bezier(0, 0, 0, 1);
+	--loom-motion-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+
+	/* ── 尺寸与布局 ───────────────────────────────── */
+	--loom-icon-size-sm: 14px;
+	--loom-icon-size-base: 16px;
+	--loom-icon-size-lg: 20px;
+
+	--loom-panel-width-sidebar: 260px;
+	--loom-panel-width-auxiliary: 420px;
+	--loom-panel-width-min: 200px;
+	--loom-panel-width-max: 640px;
+
+	--loom-content-max-width: 1200px;
+
+	--loom-control-height-sm: 22px;
+	--loom-control-height-base: 26px;
+	--loom-control-height-lg: 32px;
+}
+
+/* ── 原生圆角 token 覆盖 ─────────────────────────────
+   VS Code 1.142 内置 cornerRadius.* size token（baseSizes.ts:90-112），
+   其自身 CSS 大量使用 var(--vscode-cornerRadius-*)。
+   这些 token 由 core 代码 registerSize 注册，扩展无法贡献（extensionPoints.json
+   无 sizes 条目），但可以在此覆盖变量值，从而统一全界面圆角而无需逐组件写规则。
+   必须与 --vscode-* 同作用域，理由同下方颜色桥接。 */
+.monaco-workbench {
+	--vscode-cornerRadius-xSmall: var(--loom-radius-2, 2px);
+	--vscode-cornerRadius-small: var(--loom-radius-4, 4px);
+	--vscode-cornerRadius-medium: var(--loom-radius-6, 6px);
+	--vscode-cornerRadius-large: var(--loom-radius-8, 8px);
+	--vscode-cornerRadius-xLarge: var(--loom-radius-8, 8px);
+	--vscode-cornerRadius-circle: var(--loom-radius-full, 9999px);
+}
+
+/* ── 颜色桥接 ───────────────────────────────────────
+   必须与 --vscode-* 同作用域：声明处即解析 var()。
+   右侧取值是兜底，仅在桥接未生效时使用；判别方法见文件头。 */
+.monaco-workbench {
+	--loom-color-surface: var(--vscode-loom-surface-default, #191A1B);
+	--loom-color-surface-raised: var(--vscode-loom-surface-raised, #1F2021);
+	--loom-color-surface-sunken: var(--vscode-loom-surface-sunken, #121314);
+
+	--loom-color-text: var(--vscode-loom-text-default, #BFBFBF);
+	--loom-color-text-muted: var(--vscode-loom-text-muted, #8C8C8C);
+	--loom-color-text-disabled: var(--vscode-loom-text-disabled, #555555);
+
+	--loom-color-border-subtle: var(--vscode-loom-border-subtle, #2A2B2C);
+	--loom-color-border-strong: var(--vscode-loom-border-strong, #3A3B3C);
+
+	--loom-color-accent: var(--vscode-loom-accent-default, #3B82F6);
+	--loom-color-accent-hover: var(--vscode-loom-accent-hover, #2D6FE0);
+	--loom-color-on-accent: var(--vscode-loom-accent-onAccent, #FFFFFF);
+}

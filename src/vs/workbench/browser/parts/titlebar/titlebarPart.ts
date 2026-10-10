@@ -895,6 +895,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 	}
 
 	private get layoutControlEnabled(): boolean {
+		// 布局控制条整体保留（切换按钮要留）；露不露下拉由 layoutControl.type 决定
 		return this.configurationService.getValue<boolean>(LayoutSettings.LAYOUT_ACTIONS) !== false;
 	}
 

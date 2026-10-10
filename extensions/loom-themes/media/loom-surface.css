@@ -1,0 +1,83 @@
+/* Loom 表面层：容器、标签页、面板的圆润处理。
+ *
+ * 覆盖依据：非颜色属性（圆角/间距）在 VS Code 中没有对应的 CSS 变量，
+ * 主题贡献点只能改颜色值，故此类统一必须通过选择器覆盖实现。
+ * 风险与对策：选择器覆盖在上游改 DOM 结构时会静默失效（不报错）。
+ * 缓解方式——只依赖长期稳定的 workbench 类名，并把断言写进
+ * scripts/verify-loom-css.mjs，结构变动时能被检出。
+ *
+ * 所有取值只消费 --loom-*，且带兜底值（主题切走时本文件被卸载）。
+ */
+
+/* ── 标签页：圆润的顶部圆角 + 清爽间距 ── */
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab {
+	border-top-left-radius: var(--loom-radius-6, 6px);
+	border-top-right-radius: var(--loom-radius-6, 6px);
+	margin-right: var(--loom-space-0, 0);
+	transition: background-color var(--loom-motion-duration-fast, 100ms) var(--loom-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab.active {
+	border-top-left-radius: var(--loom-radius-6, 6px);
+	border-top-right-radius: var(--loom-radius-6, 6px);
+}
+
+/* 标签页分隔线在圆角下显得脏，去掉 */
+.monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab::after {
+	display: none;
+}
+
+/* ── 关于各分区的圆角 ─────────────────────────────────
+   modernUI 已在各 .part 上应用 border-radius: var(--vscode-cornerRadius-large)
+   （见 browser/media/floatingPanels.css）。早期这里曾在 .content 上再加一层
+   圆角，结果与 .part 的圆角叠加，内容区在圆角处内收；同时给标题区设了
+   12/8 的不对称内边距，把标题图标推离中心。两处均已移除，圆角与内边距
+   统一交给 modernUI 与 cornerRadius token 处理。 */
+
+/* 活动栏与侧边栏之间不再需要任何着色补偿：活动栏卡片已填满其所在列，
+   两张卡的边界处直接是框架层色与内容层色的交界，分层由颜色本身提供。
+   早期在此叠过投影与背景覆盖，都属借邻接元素替这段留白着色，
+   会随相邻面板的显隐失效，已全部移除。 */
+
+/* ── 活动栏不采用浮动卡片形态 ──────────────────────────
+   活动栏贴在窗口侧边，不需要浮起。一旦给卡片四周留出间隙，就会凭空
+   产生四片「间隙」，而这些间隙没有唯一的着色者——谁先绘制谁说了算。
+   侧边栏展开时会占走卡片右侧那片，活动栏的可见宽度因此随侧边栏显隐
+   变化（实测展开 0..40、关闭 0..44），图标看起来在两种状态间跳动。
+   解法是让活动栏填满它所在的列：卡片宽度等于列宽，左右都不留间隙，
+   「间隙归谁」这个问题便不存在。改动在源码层，本文件不再需要任何
+   位移或投影补偿：
+     parts/activitybar/activitybarPart.ts   floatingHorizontalGutter 不再预留外缘
+     browser/media/floatingPanels.css       卡片左侧 margin 归零；内容按 lane 居中
+   色块自身左右各留 1.5px，已足以提供呼吸感。 */
+
+/* ── 活动栏选中/悬停色块 ────────────────────────────
+   上游 modernUI/activityBar.css 把色块做成边长 (action-height - 4) = 28 的正方形，
+   并用 (width - height + 4)/2 做水平居中、top:0 贴顶。
+   参考实现的参数为：色块宽等于图标容器宽、高为 item 高减 1、圆角 5px，
+   即 34 x 31，两方向都居中。这里按该组参数覆盖，尺寸仍由变量推导，
+   因此 item 高度或栏宽变化时会跟随，不会写死。
+   补充：action-label 只承载图标，圆角由色块自身承担。 */
+.monaco-workbench.modern-ui .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked .active-item-indicator,
+.monaco-workbench.modern-ui .activitybar > .content:not(.dragged-over):not(.dragged-over-head):not(.dragged-over-tail) :not(.monaco-menu) > .monaco-action-bar .action-item:not(.checked):hover .active-item-indicator {
+	/* 色块取正方形：宽由高决定，而非撑满栏宽。
+	   高 = item 高 - 1，故垂直余量恒为 1px，两等分即 0.5px，
+	   该值与 action-height 的取值无关。两处引用同一表达式，不引入中间
+	   变量——本文件的约定是 --loom-* 只定义在 :root / .monaco-workbench 内，
+	   且所有 var() 引用都要带兜底值。 */
+	left: 0;
+	right: 0;
+	top: calc(1px / 2);
+	bottom: auto;
+	margin: 0 auto;
+	width: calc(var(--activity-bar-action-height, 32px) - 1px);
+	height: calc(var(--activity-bar-action-height, 32px) - 1px);
+	border-radius: 5px;
+}
+
+/* 活动栏 item 的间距由 upstream 的 --activity-bar-action-gap 控制
+   （见 parts/browser/media/floatingPanels.css，值来自 activitybarPart.ts）。
+   早期这里额外加过 margin-bottom，会与其叠加，已移除。
+
+   选中/悬停的高亮块由 .active-item-indicator 绘制（见上），
+   .action-label 只承载图标，无需自己的圆角。 */

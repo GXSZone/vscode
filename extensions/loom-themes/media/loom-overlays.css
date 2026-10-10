@@ -1,0 +1,70 @@
+/* Loom 浮层：菜单、上下文菜单、通知、命令面板。
+ * 圆润 + 柔和阴影，是「现代化」感知最强的部分。 */
+
+/* ── 上下文菜单：圆角 + 抬升 ── */
+.monaco-workbench .monaco-menu-container,
+.monaco-workbench .context-view .monaco-menu {
+	border-radius: var(--loom-radius-8, 8px);
+	box-shadow: var(--loom-shadow-2, 0 2px 8px rgba(0, 0, 0, 0.18));
+	overflow: hidden;
+}
+
+.monaco-workbench .monaco-menu .monaco-action-bar .action-item {
+	border-radius: var(--loom-radius-4, 4px);
+	margin: var(--loom-space-0, 0) var(--loom-space-1, 4px);
+}
+
+/* ── 命令面板 / 快速输入：大圆角 + 深阴影 ── */
+.monaco-workbench .quick-input-widget {
+	border-radius: var(--loom-radius-8, 8px);
+	box-shadow: var(--loom-shadow-3, 0 8px 24px rgba(0, 0, 0, 0.26));
+	overflow: hidden;
+}
+
+.monaco-workbench .quick-input-widget .quick-input-list .monaco-list-row {
+	border-radius: var(--loom-radius-4, 4px);
+}
+
+/* ── 通知 Toast：圆角 + 阴影 ── */
+.monaco-workbench .notifications-toasts .notification-toast {
+	border-radius: var(--loom-radius-8, 8px);
+	box-shadow: var(--loom-shadow-2, 0 2px 8px rgba(0, 0, 0, 0.18));
+	overflow: hidden;
+}
+
+/* ── 悬浮提示 ── */
+.monaco-workbench .monaco-hover,
+.monaco-workbench .monaco-editor .monaco-hover {
+	border-radius: var(--loom-radius-6, 6px);
+	box-shadow: var(--loom-shadow-2, 0 2px 8px rgba(0, 0, 0, 0.18));
+}
+
+/* ── 下拉选择弹层 ── */
+.monaco-workbench .monaco-select-box-dropdown-container > .select-box-details-pane,
+.monaco-workbench .monaco-select-box-dropdown-container > .select-box-list {
+	border-radius: var(--loom-radius-6, 6px);
+}
+
+/* ── 建议小部件（自动补全）── */
+.monaco-editor .suggest-widget,
+.monaco-editor .parameter-hints-widget {
+	border-radius: var(--loom-radius-6, 6px);
+	box-shadow: var(--loom-shadow-2, 0 2px 8px rgba(0, 0, 0, 0.18));
+	overflow: hidden;
+}
+
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row {
+	border-radius: var(--loom-radius-4, 4px);
+}
+
+/* ── 对话框 ── */
+.monaco-workbench .monaco-dialog-box {
+	border-radius: var(--loom-radius-8, 8px);
+	box-shadow: var(--loom-shadow-3, 0 8px 24px rgba(0, 0, 0, 0.26));
+	overflow: hidden;
+}
+
+/* ── 设置页 / 欢迎页等编辑器内的卡片 ── */
+.monaco-workbench .monaco-editor .scroll-decoration {
+	border-radius: var(--loom-radius-4, 4px);
+}

@@ -6,6 +6,7 @@
 import './media/activitybarpart.css';
 import './media/activityaction.css';
 import { localize, localize2 } from '../../../../nls.js';
+import { isLoomEntrypointVisible } from '../../../common/loomEntrypoints.js';
 import { ActionsOrientation } from '../../../../base/browser/ui/actionbar/actionbar.js';
 import { Part } from '../../part.js';
 import { mainWindow } from '../../../../base/browser/window.js';
@@ -50,9 +51,15 @@ export class ActivitybarPart extends Part {
 	static readonly ACTIVITYBAR_WIDTH = 48;
 	static readonly COMPACT_ACTIVITYBAR_WIDTH = 36;
 
-	/** Narrower dimensions used when the floating panels (Modern UI) experiment is enabled. */
-	static readonly FLOATING_ACTION_HEIGHT = 36;
-	static readonly FLOATING_ACTIVITYBAR_WIDTH = 36;
+	/**
+	 * Dimensions used when the floating panels (Modern UI) experiment is enabled.
+	 * The rail width is set so that the rendered column — base + floatingHorizontalGutter
+	 * (outer margin 8 + lane 8) — equals 66px, matching the reference layout's activity
+	 * column. Changing it only affects the rail's own width; the lane and margin constants
+	 * stay untouched so floatingPanels.css needs no matching edit.
+	 */
+	static readonly FLOATING_ACTION_HEIGHT = 32;
+	static readonly FLOATING_ACTIVITYBAR_WIDTH = 34;
 	static readonly FLOATING_COMPACT_ACTIVITYBAR_WIDTH = 28;
 
 	/**
@@ -60,14 +67,14 @@ export class ActivitybarPart extends Part {
 	 * panels experiment. Published to CSS as `--activity-bar-action-gap` so that the
 	 * stylesheet and the overflow computation cannot drift apart.
 	 */
-	static readonly FLOATING_ACTION_GAP = 8;
+	static readonly FLOATING_ACTION_GAP = 6;
 
 	/**
 	 * The compact Modern UI density tightens that gap to match its denser rhythm.
 	 */
 	static readonly FLOATING_COMPACT_ACTION_GAP = 4;
 
-	static readonly ICON_SIZE = 24;
+	static readonly ICON_SIZE = 22;
 	static readonly COMPACT_ICON_SIZE = 16;
 
 	/**
@@ -81,7 +88,13 @@ export class ActivitybarPart extends Part {
 	 * column. Independent of the cluster perimeter so the icons keep their inset whatever the
 	 * gutter is. Must match `--modern-ui-activitybar-lane` in `floatingPanels.css`.
 	 */
-	static readonly FLOATING_LANE = 8;
+	/**
+	 * Loom: the lane equals the full column gutter, so the rail card spans its entire
+	 * column. With a narrower lane the card would leave a sliver of column beside it that
+	 * no element owns — its colour would then depend on which neighbour happened to paint
+	 * there, and the rail's apparent width would change as the side bar was toggled.
+	 */
+	static readonly FLOATING_LANE = 6;
 	static readonly FLOATING_COMPACT_LANE = 4;
 
 	/**
@@ -153,10 +166,12 @@ export class ActivitybarPart extends Part {
 			return 0;
 		}
 
-		// The cluster perimeter on the window side, plus the rail's own lane beside the icon
-		// column, where the primary side bar meets it flush.
+		// Loom: the rail hugs the window edge instead of floating as a card, so the column
+		// reserves only the rail's own lane beside the icon column. The cluster perimeter
+		// (outer margin) is deliberately not reserved — see the matching CSS in
+		// floatingPanels.css, where the card has no leading margin either.
 		const lane = this.layoutService.isModernUICompact() ? ActivitybarPart.FLOATING_COMPACT_LANE : ActivitybarPart.FLOATING_LANE;
-		return getFloatingPanelOuterMargin(this.layoutService) + lane
+		return lane
 			+ (this.needsFloatingLeadingGap ? getFloatingPanelMargin(this.layoutService) : 0);
 	}
 
@@ -609,24 +624,27 @@ export class ActivityBarCompositeBar extends PaneCompositeBar {
 	}
 
 	getActivityBarContextMenuActions(): IAction[] {
-		const activityBarPositionMenu = this.menuService.getMenuActions(MenuId.ActivityBarPositionMenu, this.contextKeyService, { shouldForwardArgs: true, renderShortTitle: true });
-		const positionActions = getContextMenuActions(activityBarPositionMenu).secondary;
-		const actions: IAction[] = [
-			new SubmenuAction('workbench.action.activityBar.position', localize('activity bar position', "Activity Bar Position"), positionActions),
-		];
+		const actions: IAction[] = [];
 
-		// Show size submenu only when activity bar is in default position
-		const activityBarPosition = this.configurationService.getValue<string>(LayoutSettings.ACTIVITY_BAR_LOCATION);
-		if (activityBarPosition === ActivityBarPosition.DEFAULT) {
-			const isCompact = this.configurationService.getValue<boolean>(LayoutSettings.ACTIVITY_BAR_COMPACT) ?? false;
-			const sizeActions = [
-				toAction({ id: 'workbench.action.activityBar.size.default', label: localize('activityBarSizeDefault', "Default"), checked: !isCompact, run: () => this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_COMPACT, false) }),
-				toAction({ id: 'workbench.action.activityBar.size.compact', label: localize('activityBarSizeCompact', "Compact"), checked: isCompact, run: () => this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_COMPACT, true) }),
-			];
-			actions.push(new SubmenuAction('workbench.action.activityBar.size', localize('activity bar size', "Activity Bar Size"), sizeActions));
+		// Loom：活动栏右键菜单里的布局项收起；实现保留在这一层条件里，恢复见 loomEntrypoints
+		if (isLoomEntrypointVisible('activityBarLayoutMenu')) {
+			const activityBarPositionMenu = this.menuService.getMenuActions(MenuId.ActivityBarPositionMenu, this.contextKeyService, { shouldForwardArgs: true, renderShortTitle: true });
+			const positionActions = getContextMenuActions(activityBarPositionMenu).secondary;
+			actions.push(new SubmenuAction('workbench.action.activityBar.position', localize('activity bar position', "Activity Bar Position"), positionActions));
+
+			// Show size submenu only when activity bar is in default position
+			const activityBarPosition = this.configurationService.getValue<string>(LayoutSettings.ACTIVITY_BAR_LOCATION);
+			if (activityBarPosition === ActivityBarPosition.DEFAULT) {
+				const isCompact = this.configurationService.getValue<boolean>(LayoutSettings.ACTIVITY_BAR_COMPACT) ?? false;
+				const sizeActions = [
+					toAction({ id: 'workbench.action.activityBar.size.default', label: localize('activityBarSizeDefault', "Default"), checked: !isCompact, run: () => this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_COMPACT, false) }),
+					toAction({ id: 'workbench.action.activityBar.size.compact', label: localize('activityBarSizeCompact', "Compact"), checked: isCompact, run: () => this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_COMPACT, true) }),
+				];
+				actions.push(new SubmenuAction('workbench.action.activityBar.size', localize('activity bar size', "Activity Bar Size"), sizeActions));
+			}
+
+			actions.push(toAction({ id: ToggleSidebarPositionAction.ID, label: ToggleSidebarPositionAction.getLabel(this.layoutService), run: () => this.instantiationService.invokeFunction(accessor => new ToggleSidebarPositionAction().run(accessor)) }));
 		}
-
-		actions.push(toAction({ id: ToggleSidebarPositionAction.ID, label: ToggleSidebarPositionAction.getLabel(this.layoutService), run: () => this.instantiationService.invokeFunction(accessor => new ToggleSidebarPositionAction().run(accessor)) }));
 
 		if (this.part === Parts.SIDEBAR_PART) {
 			actions.push(toAction({ id: ToggleSidebarVisibilityAction.ID, label: ToggleSidebarVisibilityAction.LABEL, run: () => this.instantiationService.invokeFunction(accessor => new ToggleSidebarVisibilityAction().run(accessor)) }));

@@ -1,0 +1,107 @@
+{
+	// Loom 品牌色 —— 变更时集中替换以下四项，勿散落到别处
+	//   brand.primary    #2563EB   品牌主色（亮背景上加深以保证对比度）
+	//   brand.hover      #1D4ED8   主色悬停态
+	//   brand.onPrimary  #FFFFFF   主色上的前景
+	//   brand.focus      #2563EB   焦点边框
+	"$schema": "vscode://schemas/color-theme",
+	"name": "Loom Light",
+	"type": "light",
+	"colors": {
+		"button.background": "#2563EB",
+		"button.foreground": "#FFFFFF",
+		"button.hoverBackground": "#1D4ED8",
+		"focusBorder": "#00000000",
+
+		/* ── 三层表面结构（与深色同构，外框与内容区反向对比）──
+		   外框：标题栏 + 活动栏      用 sunken，比内容区暗一档
+		   内容：侧边栏 + 编辑器      用 raised，两者同色
+		   标签栏：介于两者之间        用 default */
+		"editor.background": "#FFFFFF",
+		"sideBar.background": "#FFFFFF",
+		"sideBarSectionHeader.background": "#FFFFFF",
+
+		"titleBar.activeBackground": "#F0F1F2",
+		"titleBar.inactiveBackground": "#F0F1F2",
+		"titleBar.activeForeground": "#202020",
+		"titleBar.inactiveForeground": "#606060",
+		"activityBar.background": "#F0F1F2",
+		"activityBar.foreground": "#202020",
+		"activityBar.inactiveForeground": "#606060",
+		"modernActivityBarItem.activeForeground": "#202020",
+
+		"editorGroupHeader.tabsBackground": "#FAFAFD",
+		"editorGroupHeader.noTabsBackground": "#FAFAFD",
+		"tab.activeBackground": "#FFFFFF",
+		"tab.inactiveBackground": "#FAFAFD",
+
+		"statusBar.background": "#00000000",
+		"statusBar.noFolderBackground": "#00000000",
+		"panel.background": "#FFFFFF",
+
+		"tab.activeBorderTop": "#2563EB",
+		"tab.unfocusedActiveBorderTop": "#00000000",
+		"tab.activeBorder": "#FFFFFF",
+		"tab.border": "#00000000",
+
+		"titleBar.border": "#00000000",
+		"activityBar.border": "#00000000",
+		"sideBar.border": "#00000000",
+		"statusBar.border": "#00000000",
+		"editorGroup.border": "#00000000",
+		"editorGroupHeader.border": "#00000000",
+		"contrastBorder": "#00000000",
+		"editorGroup.focusedEmptyBorder": "#00000000",
+		"editorGroup.dropIntoPromptBorder": "#00000000",
+		"statusBar.noFolderBorder": "#00000000",
+		"statusBar.focusBorder": "#00000000",
+		"statusBar.debuggingBorder": "#00000000",
+		"activityBar.activeBorder": "#00000000",
+		"activityBar.activeFocusBorder": "#00000000",
+		"activityBar.dropBorder": "#00000000",
+		"panel.dropBorder": "#00000000",
+		"sideBarSectionHeader.border": "#00000000",
+		"editorGroupHeader.tabsBorder": "#00000000",
+		"widget.border": "#F0F1F2",
+		"menu.border": "#00000000",
+		"pickerGroup.border": "#00000000",
+		"sash.hoverBorder": "#2563EB",
+		"panel.border": "#F0F1F2",
+
+		/* ── Modern UI 框架 token ─────────────────────── */
+		"surface.background": "#FFFFFF",
+		"surface.foreground": "#202020",
+		"surface.border": "#00000000",
+		"editor.border": "#00000000",
+		"modernPanel.border": "#00000000",
+		"modernActivityBar.border": "#00000000",
+
+		"modernUI.shellBackground": "#F0F1F2",
+		"modernUI.inactiveShellBackground": "#F0F1F2",
+
+		"modernActivityBar.background": "#F0F1F2",
+		"modernActivityBar.inactiveBackground": "#F0F1F2",
+		"modernActivityBarItem.activeBackground": "#0000001A",
+		"modernActivityBarItem.hoverBackground": "#00000012",
+
+		"modernSash.gripForeground": "#00000000",
+
+		"foreground": "#202020",
+		"descriptionForeground": "#606060",
+		"list.hoverBackground": "#00000014",
+		"list.activeSelectionBackground": "#00000025",
+
+		// Loom 专有 token
+		"loom.surface.default": "#FAFAFD",
+		"loom.surface.raised": "#FFFFFF",
+		"loom.surface.sunken": "#F0F1F2",
+		"loom.text.default": "#202020",
+		"loom.text.muted": "#606060",
+		"loom.text.disabled": "#A0A0A0",
+		"loom.border.subtle": "#F0F1F2",
+		"loom.border.strong": "#D0D1D2",
+		"loom.accent.default": "#2563EB",
+		"loom.accent.hover": "#1D4ED8",
+		"loom.accent.onAccent": "#FFFFFF"
+	}
+}

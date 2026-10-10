@@ -1,0 +1,67 @@
+{
+	// Loom 产品图标主题。
+	//
+	// 覆盖对象是经 registerIcon(id, defaultCodicon, ...) 注册的图标 ID，
+	// 它们本就可被任意产品图标主题替换，因此这里无需改动上游代码。
+	//
+	// 字形来源：Tabler Icons v3.49.0（MIT），300 粗细，24x24 网格细线风格。
+	// 用 pyftsubset 按码点裁剪，只保留本文件引用的 32 个字形，
+	// 字体体积从 1798 KB 降到 9.9 KB。裁剪命令记在 docs 内。
+	// 字体为填充轮廓，因此不需要 SVG 描边转填充这一步。
+	"fonts": [
+		{
+			"id": "loom-icons",
+			"src": [
+				{
+					"path": "../media/loom-icons.ttf",
+					"format": "truetype"
+				}
+			],
+			"weight": "normal",
+			"style": "normal"
+		}
+	],
+	"iconDefinitions": {
+		// ── 活动栏主区 ──
+		"explorer-view-icon": { "fontCharacter": "\uEDEF" },
+		"search-view-icon": { "fontCharacter": "\uEB1C" },
+		"source-control-view-icon": { "fontCharacter": "\uEAB2" },
+		"run-view-icon": { "fontCharacter": "\uEA48" },
+		"extensions-view-icon": { "fontCharacter": "\uEB10" },
+		"remote-explorer-view-icon": { "fontCharacter": "\uEB54" },
+
+		// ── 活动栏底部 ──
+		"settings-view-bar-icon": { "fontCharacter": "\uEB20" },
+		"accounts-view-bar-icon": { "fontCharacter": "\uEF68" },
+		"settings-editor-label-icon": { "fontCharacter": "\uEB20" },
+		"preferences-editor-label-icon": { "fontCharacter": "\uEB20" },
+
+		// ── 视图 ──
+		"chat-view-icon": { "fontCharacter": "\uEAEF" },
+		"outline-view-icon": { "fontCharacter": "\uEBD0" },
+		"timeline-view-icon": { "fontCharacter": "\uEBEA" },
+		"open-editors-view-icon": { "fontCharacter": "\uEDEF" },
+		"ai-customization-view-icon": { "fontCharacter": "\uEB10" },
+		"comments-view-icon": { "fontCharacter": "\uEAEE" },
+
+		// ── 面板 ──
+		"terminal-view-icon": { "fontCharacter": "\uEBEF" },
+		"debug-console-view-icon": { "fontCharacter": "\uEBEF" },
+		"output-view-icon": { "fontCharacter": "\uEB6B" },
+		"test-view-icon": { "fontCharacter": "\uEBD2" },
+		"markers-view-icon": { "fontCharacter": "\uEA48" },
+		"ports-view-icon": { "fontCharacter": "\uEB54" },
+
+		// ── 编辑器标签 ──
+		"chat-editor-label-icon": { "fontCharacter": "\uEAEF" },
+		"chat-debug-editor-label-icon": { "fontCharacter": "\uEA48" },
+		"search-editor-label-icon": { "fontCharacter": "\uEB1C" },
+		"extensions-editor-label-icon": { "fontCharacter": "\uEB10" },
+		"keybindings-editor-label-icon": { "fontCharacter": "\uEB20" },
+		"models-management-editor-label-icon": { "fontCharacter": "\uEB20" },
+		"workspace-trust-editor-label-icon": { "fontCharacter": "\uEF68" },
+		"process-explorer-editor-label-icon": { "fontCharacter": "\uEA89" },
+		"repl-editor-label-icon": { "fontCharacter": "\uEBEF" },
+		"multi-diff-editor-label-icon": { "fontCharacter": "\uEBD0" }
+	}
+}

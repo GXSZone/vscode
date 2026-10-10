@@ -49,6 +49,7 @@ import { compareIgnoreCase } from '../../../../base/common/strings.js';
 import { IExtensionService } from '../../extensions/common/extensions.js';
 import { IProgressService, ProgressLocation } from '../../../../platform/progress/common/progress.js';
 import { IWorkbenchEnvironmentService } from '../../environment/common/environmentService.js';
+import { isLoomEntrypointHidden } from '../../../common/loomEntrypoints.js';
 
 const emptyEditableSettingsContent = '{\n}';
 
@@ -74,7 +75,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 
 	constructor(
 		@IEditorService private readonly editorService: IEditorService,
-		@IEditorGroupsService private readonly editorGroupService: IEditorGroupsService,
+			@IEditorGroupsService private readonly editorGroupService: IEditorGroupsService,
 		@ITextFileService private readonly textFileService: ITextFileService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@INotificationService private readonly notificationService: INotificationService,
@@ -124,13 +125,14 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		return workspace.configuration || workspace.folders[0].toResource(FOLDER_SETTINGS_PATH);
 	}
 
+
 	private createOrGetCachedSettingsEditor2Input(): SettingsEditor2Input {
-		if (!this._cachedSettingsEditor2Input || this._cachedSettingsEditor2Input.isDisposed()) {
-			// Recreate the input if the user never opened the Settings editor,
-			// or if they closed it and want to reopen it.
-			this._cachedSettingsEditor2Input = new SettingsEditor2Input(this);
-		}
-		return this._cachedSettingsEditor2Input;
+	if (!this._cachedSettingsEditor2Input || this._cachedSettingsEditor2Input.isDisposed()) {
+		// Recreate the input if the user never opened the Settings editor,
+		// or if they closed it and want to reopen it.
+		this._cachedSettingsEditor2Input = new SettingsEditor2Input(this);
+	}
+	return this._cachedSettingsEditor2Input;
 	}
 
 	getFolderSettingsResource(resource: URI): URI | null {
@@ -216,7 +218,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 	}
 
 	async openPreferences(): Promise<void> {
-		await this.editorService.openEditor(this.instantiationService.createInstance(PreferencesEditorInput), undefined, MODAL_GROUP);
+		await this.editorService.openEditor(this.instantiationService.createInstance(PreferencesEditorInput), undefined, ACTIVE_GROUP);
 	}
 
 	openSettings(options: IOpenSettingsOptions = {}): Promise<IEditorPane | undefined> {
@@ -278,7 +280,6 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		const group = this.getEditorGroupFromOptions(options);
 		return this.editorService.openEditor(input, validateSettingsEditorOptions(options), group);
 	}
-
 	openApplicationSettings(options: IOpenSettingsOptions = {}): Promise<IEditorPane | undefined> {
 		options = {
 			...options,
@@ -360,7 +361,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 			}
 
 		} else {
-			const editor = (await this.editorService.openEditor(this.instantiationService.createInstance(KeybindingsEditorInput), { ...options }, MODAL_GROUP)) as IKeybindingsEditorPane;
+			const editor = (await this.editorService.openEditor(this.instantiationService.createInstance(KeybindingsEditorInput), { ...options }, ACTIVE_GROUP)) as IKeybindingsEditorPane;
 			if (options.query) {
 				editor.search(options.query);
 			}
@@ -389,6 +390,11 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 				}
 				return group;
 			}
+		}
+
+		// Loom：设置固定以编辑器标签页打开，弹窗入口收起（恢复见 loomEntrypoints）
+		if (isLoomEntrypointHidden('settingsModal')) {
+			return ACTIVE_GROUP;
 		}
 
 		if (

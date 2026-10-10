@@ -1,0 +1,23 @@
+{
+	"name": "loom-file-icons",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "1.0.0",
+	"publisher": "loom",
+	"license": "MIT",
+	"engines": {
+		"vscode": "*"
+	},
+	"categories": [
+		"Themes"
+	],
+	"contributes": {
+		"iconThemes": [
+			{
+				"id": "Loom File Icons",
+				"label": "%fileIconsLabel%",
+				"path": "./fileicons/loom-file-icons-icon-theme.json"
+			}
+		]
+	}
+}

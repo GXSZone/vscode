@@ -958,7 +958,7 @@ export default defineThemedFixtureGroup({ path: 'editor/' }, {
 			render: render(true, {}),
 			expectedVisualDescriptions: ['Tabs without a file icon theme use the same balanced iconless leading spacing as the Show Icons disabled setting.'],
 		}),
-		Minimal: defineComponentFixture({ fileIconTheme: 'vs-minimal', render: render(true, {}) }),
+		Minimal: defineComponentFixture({ fileIconTheme: 'vs-seti', render: render(true, {}) }),
 	}),
 	Layout: defineThemedFixtureGroup(createLayoutFixtures()),
 	Scrolling: defineThemedFixtureGroup({

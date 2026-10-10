@@ -1,0 +1,20 @@
+Tabler Icons
+============
+
+本目录下的 loom-icons.ttf 由 Tabler Icons 裁剪而来。
+
+- 上游: https://github.com/tabler/tabler-icons
+- 版本: v3.49.0
+- 许可: MIT
+- 源文件: dist/fonts/tabler-icons-300.ttf (1798.6 KB)
+- 裁剪后: 9.9 KB / 32 个字形
+
+裁剪方式（需要 fonttools）:
+
+    pyftsubset tabler-icons-300.ttf ^
+      --unicodes=U+EA48,U+EA70,U+EA89,U+EAA2,U+EAA4,U+EAAD,U+EAB2,U+EAEC,U+EAEE,U+EAEF,U+EB10,U+EB1C,U+EB20,U+EB3A,U+EB4D,U+EB54,U+EB6B,U+EBB6,U+EBD0,U+EBD2,U+EBDC,U+EBEA,U+EBEF,U+ED46,U+EDBA,U+EDEF,U+EF60,U+EF68,U+EF6F,U+F4A2,U+F5AC,U+FAF7 ^
+      --output-file=loom-icons.ttf --no-hinting --desubroutinize
+
+码点与图标的对应关系见 ../themes/loom-icons.json。
+
+Tabler Icons 的完整 MIT 许可文本随上游发行版提供，见上游仓库 LICENSE 文件。

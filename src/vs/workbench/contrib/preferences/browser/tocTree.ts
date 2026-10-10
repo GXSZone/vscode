@@ -151,7 +151,7 @@ class TOCTreeDelegate implements IListVirtualDelegate<SettingsTreeElement> {
 	}
 
 	getHeight(element: SettingsTreeElement): number {
-		return 22;
+		return 34; // Loom：加宽的导航行高
 	}
 }
 

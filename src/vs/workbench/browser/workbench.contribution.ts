@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { isStandalone } from '../../base/browser/browser.js';
+import { isLoomEntrypointVisible } from '../common/loomEntrypoints.js';
 import { isLinux, isMacintosh, isNative, isWeb, isWindows } from '../../base/common/platform.js';
 import { localize } from '../../nls.js';
 import { Extensions as ConfigurationExtensions, ConfigurationScope, IConfigurationRegistry } from '../../platform/configuration/common/configurationRegistry.js';
@@ -816,7 +817,8 @@ const registry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Con
 					localize('layoutcontrol.type.toggles', "Shows several buttons for toggling the visibility of the panels and side bar."),
 					localize('layoutcontrol.type.both', "Shows both the dropdown and toggle buttons."),
 				],
-				'default': 'both',
+				// Loom：右上角那个下拉默认不露出，只留切换按钮；开关见 loomEntrypoints
+				'default': isLoomEntrypointVisible('customizeLayout') ? 'both' : 'toggles',
 				'description': localize('layoutControlType', "Controls whether the layout control in the custom title bar is displayed as a single menu button or with multiple UI toggles."),
 				agentsWindow: { default: 'both', readOnly: true },
 			},

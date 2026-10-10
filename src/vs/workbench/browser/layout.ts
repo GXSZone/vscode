@@ -2876,8 +2876,9 @@ const LayoutStateKeys = {
 	}),
 
 	// Part Sizing
-	SIDEBAR_SIZE: new InitializationStateKey<number>('sideBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 300),
-	AUXILIARYBAR_SIZE: new InitializationStateKey<number>('auxiliaryBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 300),
+	// Loom: 默认尺寸对齐我们参照的设计语言。
+	SIDEBAR_SIZE: new InitializationStateKey<number>('sideBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 200),
+	AUXILIARYBAR_SIZE: new InitializationStateKey<number>('auxiliaryBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 200),
 	PANEL_SIZE: new InitializationStateKey<number>('panel.size', StorageScope.PROFILE, StorageTarget.MACHINE, 300),
 
 	// Part State
@@ -3023,9 +3024,18 @@ class LayoutStateModel extends Disposable {
 		const auxiliaryBarForceMaximized = this.configurationService.getValue(WorkbenchLayoutSettings.AUXILIARYBAR_FORCE_MAXIMIZED);
 		const workbenchState = this.contextService.getWorkbenchState();
 		const mainContainerDimension = configuration.mainContainerDimension;
-		LayoutStateKeys.SIDEBAR_SIZE.defaultValue = Math.min(300, mainContainerDimension.width / 4);
+		// Loom: 侧边栏与辅助栏（聊天）的默认宽度对齐参照的设计语言。
+		// 侧边栏上限随窗口宽度分档（220 / 240 / 260），默认取窗口的三分之一而非四分之一；
+		// 聊天栏随后取「扣掉活动栏与侧边栏之后剩余宽度」的一半，使编辑器保有可预期的份额。
+		const preferredSideBarMaxWidth = mainContainerDimension.width >= 1680 ? 260
+			: mainContainerDimension.width >= 1440 ? 240
+				: 220;
+		LayoutStateKeys.SIDEBAR_SIZE.defaultValue = Math.min(preferredSideBarMaxWidth, mainContainerDimension.width / 3);
 		LayoutStateKeys.SIDEBAR_HIDDEN.defaultValue = workbenchState === WorkbenchState.EMPTY || auxiliaryBarForceMaximized === true;
-		LayoutStateKeys.AUXILIARYBAR_SIZE.defaultValue = auxiliaryBarForceMaximized ? Math.max(300, mainContainerDimension.width / 2) : Math.min(300, mainContainerDimension.width / 4);
+		const sideBarWidthForAuxiliary = LayoutStateKeys.SIDEBAR_HIDDEN.defaultValue ? 0 : LayoutStateKeys.SIDEBAR_SIZE.defaultValue;
+		LayoutStateKeys.AUXILIARYBAR_SIZE.defaultValue = auxiliaryBarForceMaximized
+			? Math.max(300, mainContainerDimension.width / 2)
+			: (mainContainerDimension.width - 38 - sideBarWidthForAuxiliary - 6) / 2;
 		LayoutStateKeys.AUXILIARYBAR_HIDDEN.defaultValue = (() => {
 			if (isWeb && !this.environmentService.remoteAuthority) {
 				return true; // not required in web if unsupported

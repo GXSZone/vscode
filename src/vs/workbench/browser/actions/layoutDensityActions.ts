@@ -10,6 +10,7 @@ import { ContextKeyExpr } from '../../../platform/contextkey/common/contextkey.j
 import { ServicesAccessor } from '../../../platform/instantiation/common/instantiation.js';
 import { IWorkbenchEnvironmentService } from '../../services/environment/common/environmentService.js';
 import { LayoutSettings, ModernUIDensity } from '../../services/layout/browser/layoutService.js';
+import { isLoomEntrypointVisible } from '../../common/loomEntrypoints.js';
 
 export const LayoutDensityMenu = new MenuId('LayoutDensityMenu');
 
@@ -18,9 +19,11 @@ const layoutDensityOptions = [
 	{ density: ModernUIDensity.Compact, title: localize2('layoutDensityCompact', "Compact") },
 ] as const;
 
-for (let index = 0; index < layoutDensityOptions.length; index++) {
-	const option = layoutDensityOptions[index];
-	registerAction2(class extends Action2 {
+// Loom：布局密度（紧凑模式）的菜单与命令入口收起；实现保留在下面，恢复见 loomEntrypoints
+if (isLoomEntrypointVisible('layoutDensity')) {
+	for (let index = 0; index < layoutDensityOptions.length; index++) {
+		const option = layoutDensityOptions[index];
+		registerAction2(class extends Action2 {
 		constructor() {
 			super({
 				id: `workbench.action.setLayoutDensity.${option.density}`,
@@ -41,4 +44,5 @@ for (let index = 0; index < layoutDensityOptions.length; index++) {
 			return configurationService.updateValue(LayoutSettings.MODERN_UI_DENSITY, option.density);
 		}
 	});
+	}
 }

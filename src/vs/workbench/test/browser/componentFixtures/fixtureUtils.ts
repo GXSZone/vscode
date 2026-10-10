@@ -272,52 +272,25 @@ class NullStorageService implements IStorageService {
 // as raw text (not parsed JSON) — this lets VS Code's JSONC parser handle
 // comments and trailing commas the way it does in the real product.
 /* eslint-disable local/code-import-patterns */
-import dark_2026 from '../../../../../../extensions/theme-defaults/themes/2026-dark.json' with { type: 'json' };
-import dark_modern from '../../../../../../extensions/theme-defaults/themes/dark_modern.json' with { type: 'json' };
-import dark_plus from '../../../../../../extensions/theme-defaults/themes/dark_plus.json' with { type: 'json' };
-import dark_vs from '../../../../../../extensions/theme-defaults/themes/dark_vs.json' with { type: 'json' };
-import hc_black from '../../../../../../extensions/theme-defaults/themes/hc_black.json' with { type: 'json' };
-import hc_light from '../../../../../../extensions/theme-defaults/themes/hc_light.json' with { type: 'json' };
-import light_2026 from '../../../../../../extensions/theme-defaults/themes/2026-light.json' with { type: 'json' };
-import light_modern from '../../../../../../extensions/theme-defaults/themes/light_modern.json' with { type: 'json' };
-import light_plus from '../../../../../../extensions/theme-defaults/themes/light_plus.json' with { type: 'json' };
-import light_vs from '../../../../../../extensions/theme-defaults/themes/light_vs.json' with { type: 'json' };
-import abyss from '../../../../../../extensions/theme-abyss/themes/abyss-color-theme.json' with { type: 'json' };
-import monokai from '../../../../../../extensions/theme-monokai/themes/monokai-color-theme.json' with { type: 'json' };
-import quietlight from '../../../../../../extensions/theme-quietlight/themes/quietlight-color-theme.json' with { type: 'json' };
-import solarized_dark from '../../../../../../extensions/theme-solarized-dark/themes/solarized-dark-color-theme.json' with { type: 'json' };
-import solarized_light from '../../../../../../extensions/theme-solarized-light/themes/solarized-light-color-theme.json' with { type: 'json' };
+import loom_dark from '../../../../../../extensions/loom-themes/themes/loom-dark.json' with { type: 'json' };
+import loom_light from '../../../../../../extensions/loom-themes/themes/loom-light.json' with { type: 'json' };
 /* eslint-enable local/code-import-patterns */
 
 function toThemeJsonText(theme: string | object): string {
 	return typeof theme === 'string' ? theme : JSON.stringify(theme);
 }
 
-export type ComponentFixtureFileIconTheme = 'none' | 'vs-seti' | 'vs-minimal';
+export type ComponentFixtureFileIconTheme = 'none' | 'vs-seti';
 type BuiltInComponentFixtureFileIconTheme = Exclude<ComponentFixtureFileIconTheme, 'none'>;
 
 const fileIconThemeResources = {
-	'vs-seti': URI.parse(new URL('./extensions/theme-seti/icons/vs-seti-icon-theme.json', document.baseURI).href),
-	'vs-minimal': URI.parse(new URL('./extensions/theme-defaults/fileicons/vs_minimal-icon-theme.json', document.baseURI).href),
+	'vs-seti': URI.parse(new URL('./extensions/theme-seti/icons/vs-seti-icon-theme.json', document.baseURI).href),
 } satisfies Record<BuiltInComponentFixtureFileIconTheme, URI>;
 const fileIconThemeResourceUrls = new Set(Object.values(fileIconThemeResources).map(resource => resource.toString(true)));
 
 const themeJsonModules: Record<string, string> = {
-	'/extensions/theme-defaults/themes/2026-dark.json': toThemeJsonText(dark_2026),
-	'/extensions/theme-defaults/themes/2026-light.json': toThemeJsonText(light_2026),
-	'/extensions/theme-defaults/themes/dark_modern.json': toThemeJsonText(dark_modern),
-	'/extensions/theme-defaults/themes/dark_plus.json': toThemeJsonText(dark_plus),
-	'/extensions/theme-defaults/themes/dark_vs.json': toThemeJsonText(dark_vs),
-	'/extensions/theme-defaults/themes/hc_black.json': toThemeJsonText(hc_black),
-	'/extensions/theme-defaults/themes/hc_light.json': toThemeJsonText(hc_light),
-	'/extensions/theme-defaults/themes/light_modern.json': toThemeJsonText(light_modern),
-	'/extensions/theme-defaults/themes/light_plus.json': toThemeJsonText(light_plus),
-	'/extensions/theme-defaults/themes/light_vs.json': toThemeJsonText(light_vs),
-	'/extensions/theme-abyss/themes/abyss-color-theme.json': toThemeJsonText(abyss),
-	'/extensions/theme-monokai/themes/monokai-color-theme.json': toThemeJsonText(monokai),
-	'/extensions/theme-quietlight/themes/quietlight-color-theme.json': toThemeJsonText(quietlight),
-	'/extensions/theme-solarized-dark/themes/solarized-dark-color-theme.json': toThemeJsonText(solarized_dark),
-	'/extensions/theme-solarized-light/themes/solarized-light-color-theme.json': toThemeJsonText(solarized_light),
+	'/extensions/loom-themes/themes/loom-dark.json': toThemeJsonText(loom_dark),
+	'/extensions/loom-themes/themes/loom-light.json': toThemeJsonText(loom_light),
 };
 
 const fixtureExtensionResourceLoaderService = new class implements IExtensionResourceLoaderService {
@@ -353,10 +326,10 @@ function createBuiltInTheme(themePath: string, uiTheme: ThemeTypeSelector, exten
 	);
 }
 
-export const darkTheme = createBuiltInTheme('/extensions/theme-defaults/themes/2026-dark.json', ThemeTypeSelector.VS_DARK);
-export const lightTheme = createBuiltInTheme('/extensions/theme-defaults/themes/light_modern.json', ThemeTypeSelector.VS);
-const darkHighContrastTheme = createBuiltInTheme('/extensions/theme-defaults/themes/hc_black.json', ThemeTypeSelector.HC_BLACK);
-const lightHighContrastTheme = createBuiltInTheme('/extensions/theme-defaults/themes/hc_light.json', ThemeTypeSelector.HC_LIGHT);
+export const darkTheme = createBuiltInTheme('/extensions/loom-themes/themes/loom-dark.json', ThemeTypeSelector.VS_DARK, 'loom-themes');
+export const lightTheme = createBuiltInTheme('/extensions/loom-themes/themes/loom-light.json', ThemeTypeSelector.VS, 'loom-themes');
+const darkHighContrastTheme = createBuiltInTheme('/extensions/loom-themes/themes/loom-dark.json', ThemeTypeSelector.HC_BLACK, 'loom-themes');
+const lightHighContrastTheme = createBuiltInTheme('/extensions/loom-themes/themes/loom-light.json', ThemeTypeSelector.HC_LIGHT, 'loom-themes');
 
 function createBuiltInFileIconTheme(id: BuiltInComponentFixtureFileIconTheme, extensionName: string): FileIconThemeData {
 	const location = fileIconThemeResources[id];
@@ -370,7 +343,6 @@ function createBuiltInFileIconTheme(id: BuiltInComponentFixtureFileIconTheme, ex
 const fileIconThemes = {
 	none: FileIconThemeData.noIconTheme,
 	'vs-seti': createBuiltInFileIconTheme('vs-seti', 'vscode-theme-seti'),
-	'vs-minimal': createBuiltInFileIconTheme('vs-minimal', 'theme-defaults'),
 } satisfies Record<ComponentFixtureFileIconTheme, FileIconThemeData>;
 const defaultFileIconTheme = fileIconThemes['vs-seti'];
 
@@ -451,7 +423,6 @@ export async function setupTheme(
 	} : undefined);
 	container.classList.add('component-fixture', 'monaco-workbench', getPlatformClass(), 'disable-animations', ...theme.classNames);
 	fileIconThemeScope.classList.toggle('component-fixture-file-icon-theme-vs-seti', fileIconThemeId === 'vs-seti');
-	fileIconThemeScope.classList.toggle('component-fixture-file-icon-theme-vs-minimal', fileIconThemeId === 'vs-minimal');
 	if (fileIconThemeClassName) {
 		container.classList.add('file-icons-enabled');
 	}

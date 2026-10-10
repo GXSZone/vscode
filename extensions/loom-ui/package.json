@@ -1,0 +1,26 @@
+{
+	"name": "loom-ui",
+	"displayName": "%displayName%",
+	"description": "%description%",
+	"version": "1.0.0",
+	"publisher": "loom",
+	"license": "MIT",
+	"engines": {
+		"vscode": "*"
+	},
+	"contributes": {
+		"configurationDefaults": {
+			"workbench.colorTheme": "Loom Dark",
+			"window.autoDetectColorScheme": true,
+			"workbench.preferredDarkColorTheme": "Loom Dark",
+			"workbench.preferredLightColorTheme": "Loom Light",
+			"workbench.preferredHighContrastColorTheme": "Loom Dark",
+			"workbench.preferredHighContrastLightColorTheme": "Loom Light",
+
+			"workbench.secondarySideBar.defaultVisibility": "visibleInWorkspace",
+			"workbench.secondarySideBar.showLabels": false,
+			"workbench.activityBar.location": "default",
+			"workbench.iconTheme": "Loom File Icons"
+		}
+	}
+}

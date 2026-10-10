@@ -192,6 +192,8 @@ export class SettingsEditor2 extends EditorPane {
 	private countElement!: HTMLElement;
 	private controlsElement!: HTMLElement;
 	private settingsTargetsWidget!: SettingsTargetsWidget;
+	/** User / Workspace 页签的容器：宽度需要跟随左侧目录栏，见 layout()。 */
+	private targetWidgetContainer!: HTMLElement;
 
 	private splitView!: SplitView<number>;
 
@@ -887,6 +889,7 @@ export class SettingsEditor2 extends EditorPane {
 		headerControlsContainer.style.borderColor = asCssVariable(settingsHeaderBorder);
 
 		const targetWidgetContainer = DOM.append(headerControlsContainer, $('.settings-target-container'));
+		this.targetWidgetContainer = targetWidgetContainer;
 		this.settingsTargetsWidget = this._register(this.instantiationService.createInstance(SettingsTargetsWidget, targetWidgetContainer, { enableRemoteSettings: true }));
 		this.settingsTargetsWidget.settingsTarget = ConfigurationTarget.USER_LOCAL;
 		this._register(this.settingsTargetsWidget.onDidTargetChange(target => this.onDidSettingsTargetChange(target)));
@@ -2280,6 +2283,11 @@ export class SettingsEditor2 extends EditorPane {
 			this.splitView.style({
 				separatorBorder: firstViewVisible ? this.theme.getColor(settingsSashBorder)! : Color.transparent
 			});
+		}
+
+		// User / Workspace 页签等分左侧目录栏宽度，跟随分割条拖动后的实际宽度。
+		if (this.splitView.isViewVisible(0)) {
+			this.targetWidgetContainer.style.width = `${this.splitView.getViewSize(0)}px`;
 		}
 	}
 

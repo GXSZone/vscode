@@ -9,7 +9,8 @@ import { ThemeIcon } from '../../../../base/common/themables.js';
 import { URI } from '../../../../base/common/uri.js';
 import * as nls from '../../../../nls.js';
 import { registerIcon } from '../../../../platform/theme/common/iconRegistry.js';
-import { IUntypedEditorInput } from '../../../common/editor.js';
+import { IUntypedEditorInput, IEditorDescriptor, IEditorPane } from '../../../common/editor.js';
+import { LOOM_SETTINGS_PANE_ID } from '../../../common/loomEntrypoints.js';
 import { EditorInput } from '../../../common/editor/editorInput.js';
 import { IPreferencesService } from './preferences.js';
 import { Settings2EditorModel } from './preferencesModels.js';
@@ -36,6 +37,17 @@ export class SettingsEditor2Input extends EditorInput {
 
 	override matches(otherInput: EditorInput | IUntypedEditorInput): boolean {
 		return super.matches(otherInput) || otherInput instanceof SettingsEditor2Input;
+	}
+
+	/**
+	 * Loom：设置界面固定由自建页面渲染。
+	 *
+	 * 设置编辑器面板默认取「第一个注册的」实现，也就是原生的那个；这里把偏好指向
+	 * 自建面板，于是所有打开设置 UI 的入口（命令、快捷键、齿轮、菜单、扩展 API、
+	 * 欢迎页直达）都会落到同一个页面，不需要在各调用点做重定向。
+	 */
+	override prefersEditorPane<Descriptor extends IEditorDescriptor<IEditorPane>>(editorPanes: Descriptor[]): Descriptor | undefined {
+		return editorPanes.find(pane => pane.typeId === LOOM_SETTINGS_PANE_ID) ?? super.prefersEditorPane(editorPanes);
 	}
 
 	override get typeId(): string {
